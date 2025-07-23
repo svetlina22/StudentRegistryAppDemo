@@ -1,41 +1,47 @@
-pipeline{
+pipeline {
     agent any
 
-    environment{
+    environment {
         NODE_VERSION = '18.x'
     }
 
-    tools{
+    tools {
         nodejs "${NODE_VERSION}"
     }
 
-    stages{
-        stage('Checkout'){
-            steps{
+    stages {
+        stage('Checkout') {
+            steps {
                 git branch: 'main', url: 'https://github.com/svetlina22/StudentRegistryAppDemo'
             }
         }
-        stage('Install dependencies'){
-            steps{
-                script{
-                    bat 'npm install'   
-                }
-            }
-        }
-        stage('Start app'){
-            steps{
-                script{
-                    bat 'npm start &'
-                    bat 'wait-on http://localhost:8081'
-                    bat 'npm test'
+
+        stage('Install dependencies') {
+            steps {
+                script {
+                    sh 'npm install'
                 }
             }
         }
 
+        stage('Start app and run tests') {
+            steps {
+                script {
+                    // Стартирай сървъра във фонов режим
+                    sh 'nohup npm start &'
+
+                    // Изчакай сървъра да тръгне
+                    sh 'npx wait-on http://localhost:8080'
+
+                    // Стартирай тестовете
+                    sh 'npm test'
+                }
+            }
+        }
     }
 
-    post{
-        always{
+    post {
+        always {
             echo "CI pipeline completed"
         }
     }
