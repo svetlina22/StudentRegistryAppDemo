@@ -18,24 +18,13 @@ pipeline {
 
         stage('Install dependencies') {
             steps {
-                script {
-                    sh 'npm install'
-                }
+                sh 'npm install'
             }
         }
 
-        stage('Start app and run tests') {
+        stage('Run tests') {
             steps {
-                script {
-                    // Стартирай сървъра във фонов режим
-                    sh 'nohup npm start &'
-
-                    // Изчакай сървъра да тръгне
-                    sh 'npx wait-on http://localhost:8080'
-
-                    // Стартирай тестовете
-                    sh 'npm test'
-                }
+                sh 'npm test'
             }
         }
     }
