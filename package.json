@@ -9,7 +9,8 @@
     "pug": "^3.0.3"
   },
   "scripts": {
-    "test": "mocha tests/*.js",
-    "start": "node index.js"
+  "start": "node index.js",
+  "test": "mocha tests/*.js",
+  "start-and-test": "start-server-and-test start http://localhost:8080 test"
   }
 }
